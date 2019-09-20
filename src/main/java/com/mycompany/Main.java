@@ -12,6 +12,9 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.IntSummaryStatistics;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class Main {
 
@@ -28,6 +31,7 @@ public class Main {
                     .build();
 
             List<Movie> movies = csvBean.parse();
+            String[] genreArray;
 
 
             for (Movie moviesList: movies
@@ -37,8 +41,8 @@ public class Main {
                 System.out.println("Rok produkcji: " + moviesList.getYear());
                 System.out.println("Typ filmu: " + moviesList.getGenre());
                 System.out.println("========================================");
-
             }
+
 
             Long moviesVolume = movies.stream()
                     .map(moviesID -> moviesID.getMovieID())
@@ -50,6 +54,10 @@ public class Main {
                     .summaryStatistics();
             System.out.println("Przedział czasowy filmów to: " + statistics.getMin() + "-" + statistics.getMax());
 
+            Map<String, Long> genresCount = movies.stream()
+                    .map(movie -> movie.getGenre())
+                    .flatMap(genres -> Arrays.stream(genres.split("\\|")))
+                    .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 
 
         }catch (URISyntaxException ex){
