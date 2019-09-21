@@ -23,7 +23,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
 
         try (
-            Reader reader = Files.newBufferedReader(Paths.get(ClassLoader.getSystemResource(CSV_FILE_PATH).toURI()))
+                Reader reader = Files.newBufferedReader(Paths.get(ClassLoader.getSystemResource(CSV_FILE_PATH).toURI()))
         ) {
             CsvToBean<Movie> csvBean = new CsvToBeanBuilder(reader)
                     .withType(Movie.class)
@@ -31,11 +31,9 @@ public class Main {
                     .build();
 
             List<Movie> movies = csvBean.parse();
-            String[] genreArray;
 
-
-            for (Movie moviesList: movies
-                 ) {
+            for (Movie moviesList : movies
+            ) {
                 System.out.println("Id filmu: " + moviesList.getMovieID());
                 System.out.println("Tytuł: " + moviesList.getTitle());
                 System.out.println("Rok produkcji: " + moviesList.getYear());
@@ -59,8 +57,16 @@ public class Main {
                     .flatMap(genres -> Arrays.stream(genres.split("\\|")))
                     .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 
+            genresCount.entrySet().stream()
+                    .sorted(Map.Entry.comparingByKey())
+                    .forEach(map -> System.out.println("Gatunek filmowy: " + map.getKey() + " pojawił się: " +  map.getValue() + " razy"));
 
-        }catch (URISyntaxException ex){
+            genresCount.entrySet().stream()
+                    .max(Map.Entry.comparingByValue())
+                    .ifPresent(max -> System.out.println("Najczęstszy gatunek filmowy to : " + max.getKey() + ", który wystąpił " + max.getValue() + " razy."));
+
+
+        } catch (URISyntaxException ex) {
             ex.printStackTrace();
         }
 
