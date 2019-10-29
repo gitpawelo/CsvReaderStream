@@ -67,6 +67,5 @@ public class Main {
         } catch (URISyntaxException ex) {
             ex.printStackTrace();
         }
-
     }
 }
