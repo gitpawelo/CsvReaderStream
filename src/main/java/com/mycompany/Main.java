@@ -41,7 +41,6 @@ public class Main {
                 System.out.println("========================================");
             }
 
-
             Long moviesVolume = movies.stream()
                     .map(moviesID -> moviesID.getMovieID())
                     .count();
@@ -64,7 +63,6 @@ public class Main {
             genresCount.entrySet().stream()
                     .max(Map.Entry.comparingByValue())
                     .ifPresent(max -> System.out.println("Najczęstszy gatunek filmowy to : " + max.getKey() + ", który wystąpił " + max.getValue() + " razy."));
-
 
         } catch (URISyntaxException ex) {
             ex.printStackTrace();
